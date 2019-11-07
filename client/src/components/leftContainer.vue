@@ -4,7 +4,13 @@
       <h3>todo-list</h3>
       <div class="user">
         <img src="../assets/logo.png" alt />
-        <el-dropdown class="dropdown" split-button type="primary" placement="bottom" trigger="click">
+        <el-dropdown
+          class="dropdown"
+          split-button
+          type="primary"
+          placement="bottom"
+          trigger="click"
+        >
           <span>togoc</span>
           <el-dropdown-menu class="menu" slot="dropdown">
             <el-dropdown-item>注销登录</el-dropdown-item>
@@ -15,27 +21,24 @@
     </div>
     <el-col>
       <el-menu background-color="#fff" default-active="1" class="el-menu-vertical-demo">
-        <el-badge :value="12" class="item">
-          <el-button size="small">
-            <el-menu-item index="1">
-              <i class="el-icon-star-off">&nbsp;重要</i>
-            </el-menu-item>
-          </el-button>
-        </el-badge>
-        <el-badge :value="12" class="item">
-          <el-button size="small">
-            <el-menu-item index="2">
-              <i class="el-icon-tickets">&nbsp;任务</i>
-            </el-menu-item>
-          </el-button>
-        </el-badge>
-        <el-badge :value="12" class="item">
-          <el-button size="small">
-            <el-menu-item index="3">
-              <i class="el-icon-circle-check">&nbsp;已完成</i>
-            </el-menu-item>
-          </el-button>
-        </el-badge>
+        <el-menu-item index="1">
+          <i class="el-icon-star-off">&nbsp;重要</i>
+          <el-badge :value="major" v-if="major>0" class="item">
+            <el-button size="small"></el-button>
+          </el-badge>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <i class="el-icon-tickets">&nbsp;任务</i>
+          <el-badge :value="task" v-if="task>0" class="item">
+            <el-button size="small"></el-button>
+          </el-badge>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <i class="el-icon-circle-check">&nbsp;已完成</i>
+          <el-badge :value="done" v-if="done>0" class="item">
+            <el-button size="small"></el-button>
+          </el-badge>
+        </el-menu-item>
       </el-menu>
     </el-col>
   </div>
@@ -47,6 +50,13 @@
 
 <script>
 export default {
+  data() {
+    return {
+      major: 1,
+      task: 1,
+      done: 0
+    };
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -63,8 +73,8 @@ export default {
 .menu {
   width: 120px;
 }
-.el-dropdown-menu__item{
-    text-align: center;
+.el-dropdown-menu__item {
+  text-align: center;
 }
 .el-button-group,
 .el-dropdown {
@@ -98,11 +108,15 @@ export default {
   width: 100%;
   outline: 0;
 }
-
+.el-badge{
+    position: absolute;
+}
 .el-menu-item {
-  width: 155px;
+  width: 165px;
   padding: 0;
+  padding-left: 15px !important;
   padding-right: 55px;
+  margin-top: 5px !important;
   text-align: center;
 }
 .title {
@@ -111,7 +125,7 @@ export default {
   line-height: 60px;
 }
 .leftContainer {
-    overflow: hidden;
+  overflow: hidden;
   z-index: 9999999;
   box-sizing: border-box;
   width: 180px;
