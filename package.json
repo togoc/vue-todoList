@@ -1,0 +1,25 @@
+{
+  "name": "vue-todoList",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/togoc/vue-todoList.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/togoc/vue-todoList/issues"
+  },
+  "homepage": "https://github.com/togoc/vue-todoList#readme",
+  "dependencies": {
+    "concurrently": "^5.0.0"
+  }
+}
