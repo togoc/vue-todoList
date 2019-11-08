@@ -10,7 +10,6 @@ module.exports = app => {
 
 
     router.get('/:id', (req, res) => {
-        console.log(req.params)
         List.find({ uid: req.params.id }).then(msg => {
             res.status(200).json(msg)
         })
@@ -18,11 +17,11 @@ module.exports = app => {
 
     router.get('/delete/:id', (req, res) => {
         List.deleteOne({ _id: req.params.id })
-        .then(profile => {
-            if (profile)
-                res.json(profile)
-        })
-        .catch(err => res.status(404).json("删除失败!"))
+            .then(profile => {
+                if (profile)
+                    res.json(profile)
+            })
+            .catch(err => res.status(404).json("删除失败!"))
     });
 
 
@@ -37,11 +36,11 @@ module.exports = app => {
 
     router.post('/edit/:id', (req, res) => {
         let list = {}
-        if (String(req.body.done)) {
-            String(req.body.done) === "false" ? list.done = false : list.done = true
+        if (req.body.done) {
+            req.body.done === "false" ? list.done = false : list.done = true
         }
-        if (String(req.body.major)) {
-            String(req.body.major) === "false" ? list.major = false : list.major = true
+        if (req.body.major) {
+            req.body.major === "false" ? list.major = false : list.major = true
         }
         List.updateOne({ _id: req.params.id }, { $set: list }, { new: true })
             .then(profile => res.json(profile))
@@ -49,10 +48,6 @@ module.exports = app => {
 
 
 
-
-    let arr = [1,2,3]
-    arr.splice(1,1)
-    console.log(arr)
 
 
 

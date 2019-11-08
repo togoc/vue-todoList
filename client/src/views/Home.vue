@@ -4,7 +4,7 @@
       <h3>我的一天</h3>
       <span class="time">{{$moment().format('LL')}}</span>
     </header>
-    <leftContainer :done="done" :major="major" :task="task"></leftContainer>
+    <leftContainer :done="done" :major="major" :task="task" :name="username"></leftContainer>
     <div class="rightContainer">
       <el-table
         height="99%"
@@ -12,6 +12,7 @@
         :data="currentlyList"
         tooltip-effect="dark"
         style="width: 100%"
+        @select-all="selectAll"
         @select="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -26,15 +27,15 @@
           align="center"
           label="筛选"
           width="100"
-          :filters="[{ text: '重要', value: '重要' }, { text: '普通', value: '普通' }]"
+          :filters="[{ text: '重要', value: true }, { text: '普通', value: false }]"
           :filter-method="filterTag"
           filter-placement="bottom-end"
         >
           <template slot-scope="scope">
             <i
               :class="scope.row.major === true ? 'el-icon-star-on' : 'el-icon-star-off'"
-              @click="taggleMajor(scope.row)"
-            ></i>
+              @click.prevent="taggleMajor(scope.row)"
+            >11</i>
             <i class="el-icon-delete" @click="dele(scope.row)"></i>
           </template>
         </el-table-column>
@@ -73,7 +74,7 @@ export default {
   data() {
     return {
       input: "",
-      username: "",
+      username: "请登录",
       centerDialogVisible: false,
       todoList: [],
       multipleSelection: []
@@ -143,6 +144,7 @@ export default {
     },
     login() {
       localStorage.removeItem("todoId");
+      localStorage.removeItem("todoName");
       let username = this.username.replace(/\s/g, "");
       if (username == "") {
         this.$message({
@@ -151,9 +153,10 @@ export default {
         });
         return;
       }
-      username += ".com";
+      this.username = username + ".com";
       this.$http.post("/api/user/login", { email: username }).then(res => {
         localStorage.setItem("todoId", res.data._id);
+        localStorage.setItem("todoName", this.username);
         this.centerDialogVisible = false;
         this.$message({
           message: "登录成功",
@@ -163,8 +166,9 @@ export default {
       });
     },
     getList() {
-      if (localStorage.todoId) {
+      if (localStorage.todoId && localStorage.todoName) {
         let id = localStorage.todoId;
+        this.username = localStorage.todoName;
         this.$http.get("/api/list/" + id).then(res => {
           this.todoList = res.data;
         });
@@ -178,7 +182,7 @@ export default {
         if (item._id === row._id) {
           item.done = !item.done;
           this.$http
-            .post("/api/list/edit/" + row._id, { done: item.done })
+            .post("/api/list/edit/" + row._id, { done: String(item.done) })
             .then(res => {
               this.$message({
                 message: "修改成功",
@@ -198,15 +202,14 @@ export default {
       }
     },
     filterTag(value, row) {
-      console.log(value, row);
-      return row.tag === value;
+      return row.major === value;
     },
     taggleMajor(row) {
       this.todoList.forEach(item => {
         if (item._id === row._id) {
           item.major = !item.major;
           this.$http
-            .post("/api/list/edit/" + row._id, { major: item.major })
+            .post("/api/list/edit/" + row._id, { major: String(item.major) })
             .then(res => {
               this.$message({
                 message: "修改成功",
@@ -216,8 +219,41 @@ export default {
         }
       });
     },
+    selectAll(selection) {
+      if (selection.length !== 0) {
+        selection.forEach(sitem => {
+          this.todoList.forEach(titem => {
+            if (sitem._id == titem._id) {
+              titem.done = true;
+              this.$http
+                .post("/api/list/edit/" + titem._id, { done: String(true) })
+                .then(res => {});
+            }
+          });
+        });
+        this.$message({
+          message: "修改成功",
+          type: "success"
+        });
+      }
+      if (selection.length == 0 && this.currentlyList.length !== 0) {
+        this.currentlyList.forEach(citem => {
+          this.todoList.forEach(titem => {
+            if (citem._id == titem._id) {
+              titem.done = false;
+              this.$http
+                .post("/api/list/edit/" + titem._id, { done: String(false) })
+                .then(res => {});
+            }
+          });
+        });
+        this.$message({
+          message: "修改成功",
+          type: "success"
+        });
+      }
+    },
     dele(row) {
-      console.log("delete:", row);
       this.todoList.forEach((item, index) => {
         if (item._id === row._id) {
           this.todoList.splice(index, 1);

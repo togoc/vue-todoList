@@ -14,7 +14,6 @@ module.exports = app => {
 
 
     router.post('/login', (req, res) => {
-        console.log("login:", req.body)
         User.findOne({ email: req.body.email }).then((user) => {
             if (user) {
                 return res.status(200).json(user)

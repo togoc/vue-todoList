@@ -4,16 +4,11 @@
       <h3>todo-list</h3>
       <div class="user">
         <img src="../assets/logo.png" alt />
-        <el-dropdown
-          class="dropdown"
-          split-button
-          type="primary"
-          trigger="click"
-        >
-          <span>请登录</span>
+        <el-dropdown class="dropdown" type="primary" trigger="click">
+          <span class="name">{{name}}</span>
           <el-dropdown-menu class="menu" slot="dropdown">
             <el-dropdown-item>
-              <button @click="logout" class="logout">注销登录</button>
+              <button @click="logout" class="logout">注销 / 登录</button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -66,7 +61,8 @@ export default {
   props: {
     done: Number,
     task: Number,
-    major: Number
+    major: Number,
+    name: String
   },
   data() {
     return {};
@@ -74,7 +70,8 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem("todoId");
-      location.reload()
+      localStorage.removeItem("todoName");
+      location.reload();
     }
   },
   computed: {
@@ -87,15 +84,30 @@ export default {
 
 
 <style scoped>
-.el-popper[x-placement^=bottom]{
+.dropdown {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  color: aliceblue;
+}
+
+.name {
+  white-space: nowrap;
+  overflow: hidden;
+  height: 40px;
+  display: block;
+  cursor: pointer;
+}
+.el-popper[x-placement^="bottom"] {
   margin-top: 0px;
   background-color: #347562;
   padding: 0;
 }
 .el-dropdown-menu {
   border: 0;
+  top: 105px !important;
 }
-.logout{
+.logout {
   cursor: pointer;
   width: 100%;
   height: 100%;
