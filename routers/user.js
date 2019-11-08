@@ -13,11 +13,11 @@ module.exports = app => {
 
 
 
-    router.post('/register', (req, res) => {
-        console.log("register:", req.body)
+    router.post('/login', (req, res) => {
+        console.log("login:", req.body)
         User.findOne({ email: req.body.email }).then((user) => {
             if (user) {
-                return res.status(400).json({ email: "邮箱已经被注册" })
+                return res.status(200).json(user)
             } else {
                 let avatar = gravatar.url(req.body.email, { size: '200', rating: 'pg', default: 'mm' });
                 let newUser = new User({
@@ -30,16 +30,19 @@ module.exports = app => {
     });
 
 
-    router.post("/login", (req, res) => {
-        console.log("login:", req.body)
-        let email = req.body.email
-            //数据库匹配
-        User.findOne({ email }).then(user => {
-            if (!user)
-                return res.status(404).json({ email: "用户不存在!" })
-            res.status(200).json(user)
-        })
-    })
+    // router.post("/login", (req, res) => {
+    //     console.log("login:", req.body)
+    //     let email = req.body.email
+    //         //数据库匹配
+    //     User.findOne({ email }).then(user => {
+    //         if (!user){
+
+
+    //             return res.status(404).json({ email: "用户不存在!" })
+    //         }
+    //         res.status(200).json(user)
+    //     })
+    // })
 
 
 

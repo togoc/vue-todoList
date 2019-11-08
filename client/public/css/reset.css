@@ -184,3 +184,6 @@ a {
 .el-dropdown ,.el-dropdown__caret-button{
     cursor: pointer !important;
 }
+.popper__arrow::after{
+    border-bottom-color: #347562 !important;
+  }
