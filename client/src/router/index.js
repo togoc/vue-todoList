@@ -6,15 +6,15 @@ Vue.use(VueRouter)
 
 const routes = [{
     path: '/',
-    redirect: '/home'
-}, {
-    path: '/home',
     name: 'home',
-    component:Home,
-    children:[
-        {path:"/major",name:"marjor"},
-        {path:"/done",name:"done"},
-        {path:"/task",name:"task"},
+    redirect: '/task',
+    component: Home,
+
+    children: [
+
+        { path: "/major", name: "marjor" },
+        { path: "/done", name: "done" },
+        { path: "/task", name: "task" },
     ]
 }, ]
 

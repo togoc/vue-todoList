@@ -18,6 +18,7 @@ module.exports = app => {
             if (user) {
                 return res.status(200).json(user)
             } else {
+                console.log(req.body.email)
                 let avatar = gravatar.url(req.body.email, { size: '200', rating: 'pg', default: 'mm' });
                 let newUser = new User({
                     email: req.body.email,

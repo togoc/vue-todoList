@@ -3,7 +3,7 @@
     <div class="title">
       <h3>todo-list</h3>
       <div class="user">
-        <img src="../assets/logo.png" alt />
+        <img :src="avatar" alt />
         <el-dropdown class="dropdown" type="primary" trigger="click">
           <span class="name">{{name}}</span>
           <el-dropdown-menu class="menu" slot="dropdown">
@@ -62,7 +62,8 @@ export default {
     done: Number,
     task: Number,
     major: Number,
-    name: String
+    name: String,
+    avatar:String
   },
   data() {
     return {};
@@ -71,6 +72,7 @@ export default {
     logout() {
       localStorage.removeItem("todoId");
       localStorage.removeItem("todoName");
+      localStorage.removeItem("avatar");
       location.reload();
     }
   },

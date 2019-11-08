@@ -4,7 +4,7 @@
       <h3>我的一天</h3>
       <span class="time">{{$moment().format('LL')}}</span>
     </header>
-    <leftContainer :done="done" :major="major" :task="task" :name="username"></leftContainer>
+    <leftContainer :done="done" :major="major" :task="task" :avatar="avatar" :name="username"></leftContainer>
     <div class="rightContainer">
       <el-table
         height="99%"
@@ -22,7 +22,7 @@
             <span style="margin-left: 10px">{{ $moment(scope.row.date).format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="container" label="To-Do List" align="center" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="container" label="To-Do List" align="center" color="blue" show-overflow-tooltip></el-table-column>
         <el-table-column
           align="center"
           label="筛选"
@@ -35,7 +35,7 @@
             <i
               :class="scope.row.major === true ? 'el-icon-star-on' : 'el-icon-star-off'"
               @click.prevent="taggleMajor(scope.row)"
-            >11</i>
+            ></i>
             <i class="el-icon-delete" @click="dele(scope.row)"></i>
           </template>
         </el-table-column>
@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       input: "",
+      avatar: "",
       username: "请登录",
       centerDialogVisible: false,
       todoList: [],
@@ -145,6 +146,7 @@ export default {
     login() {
       localStorage.removeItem("todoId");
       localStorage.removeItem("todoName");
+      localStorage.removeItem("avatar");
       let username = this.username.replace(/\s/g, "");
       if (username == "") {
         this.$message({
@@ -154,9 +156,11 @@ export default {
         return;
       }
       this.username = username + ".com";
-      this.$http.post("/api/user/login", { email: username }).then(res => {
+      this.$http.post("/api/user/login", { email:this.username}).then(res => {
         localStorage.setItem("todoId", res.data._id);
         localStorage.setItem("todoName", this.username);
+        localStorage.setItem("avatar", res.data.avatar);
+        this.avatar = res.data.avatar;
         this.centerDialogVisible = false;
         this.$message({
           message: "登录成功",
@@ -169,6 +173,7 @@ export default {
       if (localStorage.todoId && localStorage.todoName) {
         let id = localStorage.todoId;
         this.username = localStorage.todoName;
+        this.avatar= localStorage.avatar
         this.$http.get("/api/list/" + id).then(res => {
           this.todoList = res.data;
         });
@@ -378,6 +383,7 @@ h3 {
 .el-table .success-row {
   background: #f0f9eb;
 }
+
 @media screen and (max-width: 520px) {
   .leftContainer {
     display: none;
