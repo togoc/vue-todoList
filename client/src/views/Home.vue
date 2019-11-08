@@ -75,7 +75,7 @@ export default {
     return {
       input: "",
       avatar: "",
-      username: "请登录",
+      username: "309128090@qq",
       centerDialogVisible: false,
       todoList: [],
       multipleSelection: []
