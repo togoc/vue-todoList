@@ -5,7 +5,9 @@
 * ![缩小](images/mini.png)
 * ![首页](images/index.png)
 
+### server.js: node + express + mongoose + gravatar
 
+### clint: vue + element-ui + axios + momentjs
 
 ### 数据修改重载
   ``` js
