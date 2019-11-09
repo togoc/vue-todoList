@@ -22,7 +22,13 @@
             <span style="margin-left: 10px">{{ $moment(scope.row.date).format('YYYY-MM-DD')}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="container" label="To-Do List" align="center" color="blue" show-overflow-tooltip></el-table-column>
+        <el-table-column
+          prop="container"
+          label="To-Do List"
+          align="center"
+          color="blue"
+          show-overflow-tooltip
+        ></el-table-column>
         <el-table-column
           align="center"
           label="筛选"
@@ -85,6 +91,7 @@ export default {
   components: {
     leftContainer
   },
+
   computed: {
     currentPage() {
       return this.$route.path;
@@ -127,6 +134,14 @@ export default {
       return this.doneList.length;
     }
   },
+  watch: {
+    todoList: {
+      handler(newValue, oldValue) {
+        this.$store.dispatch("getList", newValue);
+      },
+      deep: true
+    }
+  },
   methods: {
     add() {
       this.$http
@@ -156,7 +171,7 @@ export default {
         return;
       }
       this.username = username + ".com";
-      this.$http.post("/api/user/login", { email:this.username}).then(res => {
+      this.$http.post("/api/user/login", { email: this.username }).then(res => {
         localStorage.setItem("todoId", res.data._id);
         localStorage.setItem("todoName", this.username);
         localStorage.setItem("avatar", res.data.avatar);
@@ -173,9 +188,14 @@ export default {
       if (localStorage.todoId && localStorage.todoName) {
         let id = localStorage.todoId;
         this.username = localStorage.todoName;
-        this.avatar= localStorage.avatar
+        this.avatar = localStorage.avatar;
         this.$http.get("/api/list/" + id).then(res => {
           this.todoList = res.data;
+          this.$store.dispatch("getUser", {
+            uid: id,
+            name: this.username,
+            avatar: this.avatar
+          });
         });
       } else {
         this.centerDialogVisible = true;
