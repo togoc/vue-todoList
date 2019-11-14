@@ -13,10 +13,12 @@
 <script>
 
 export default {
-  
   comments:{
 
-  }
+  },
+  created() {
+    this.$router.push("/")
+  },
 }
 
 </script>
