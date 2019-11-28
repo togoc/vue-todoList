@@ -186,3 +186,6 @@ a {
 .popper__arrow::after{
     border-bottom-color: #347562 !important;
   }
+.el-dialog{
+    min-width: 290px;
+}
