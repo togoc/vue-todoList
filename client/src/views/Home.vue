@@ -145,7 +145,7 @@ export default {
   methods: {
     add() {
       this.$http
-        .post("/api/list/add", {
+        .post("/todos/list/add", {
           container: this.input,
           uid: localStorage.todoId
         })
@@ -171,7 +171,7 @@ export default {
         return;
       }
       this.username = username + ".com";
-      this.$http.post("/api/user/login", { email: this.username }).then(res => {
+      this.$http.post("/todos/user/login", { email: this.username }).then(res => {
         localStorage.setItem("todoId", res.data._id);
         localStorage.setItem("todoName", this.username);
         localStorage.setItem("avatar", res.data.avatar);
@@ -189,7 +189,7 @@ export default {
         let id = localStorage.todoId;
         this.username = localStorage.todoName;
         this.avatar = localStorage.avatar;
-        this.$http.get("/api/list/" + id).then(res => {
+        this.$http.get("/todos/list/" + id).then(res => {
           this.todoList = res.data;
           this.$store.dispatch("getUser", {
             uid: id,
@@ -207,7 +207,7 @@ export default {
         if (item._id === row._id) {
           item.done = !item.done;
           this.$http
-            .post("/api/list/edit/" + row._id, { done: String(item.done) })
+            .post("/todos/list/edit/" + row._id, { done: String(item.done) })
             .then(res => {
               this.$message({
                 message: "修改成功",
@@ -234,7 +234,7 @@ export default {
         if (item._id === row._id) {
           item.major = !item.major;
           this.$http
-            .post("/api/list/edit/" + row._id, { major: String(item.major) })
+            .post("/todos/list/edit/" + row._id, { major: String(item.major) })
             .then(res => {
               this.$message({
                 message: "修改成功",
@@ -251,7 +251,7 @@ export default {
             if (sitem._id == titem._id) {
               titem.done = true;
               this.$http
-                .post("/api/list/edit/" + titem._id, { done: String(true) })
+                .post("/todos/list/edit/" + titem._id, { done: String(true) })
                 .then(res => {});
             }
           });
@@ -267,7 +267,7 @@ export default {
             if (citem._id == titem._id) {
               titem.done = false;
               this.$http
-                .post("/api/list/edit/" + titem._id, { done: String(false) })
+                .post("/todos/list/edit/" + titem._id, { done: String(false) })
                 .then(res => {});
             }
           });
@@ -282,7 +282,7 @@ export default {
       this.todoList.forEach((item, index) => {
         if (item._id === row._id) {
           this.todoList.splice(index, 1);
-          this.$http.get("/api/list/delete/" + row._id).then(res => {
+          this.$http.get("/todos/list/delete/" + row._id).then(res => {
             this.$message({
               message: "删除成功",
               type: "success"
